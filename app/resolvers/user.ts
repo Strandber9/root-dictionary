@@ -1,6 +1,8 @@
 import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from "type-graphql";
-import { User, UserModel } from "../entities/User";
+import { User } from "../entities/User";
 import { UserInput } from "./types/user-input";
+import { WordBook } from "../entities/WordBook";
+import { UserModel, WordBookModel } from "../model/models";
 
 @Resolver((_of) => User)
 export class UserResolver {
@@ -9,11 +11,10 @@ export class UserResolver {
         return await UserModel.findById({ _id: id });
     }
 
-    // @FieldResolver((_type) => Word)
-    // async product(@Root() cart: Word): Promise<Word> {
-    //     console.log(cart, "cart!");
-    //     return (await WordModel.findById(cart._doc.products))!;
-    // }
+    @FieldResolver((_type) => WordBook)
+    async word_book(@Root() user: User): Promise<Array<WordBook>> {
+        return await WordBookModel.find({ user: user._doc._id });
+    }
 
     @Mutation(() => User)
     async createUser(@Arg("data") { username, email }: UserInput): Promise<User> {
@@ -23,6 +24,6 @@ export class UserResolver {
                 email,
             })
         ).save();
-        return user;
+        return user as unknown as User;
     }
 }

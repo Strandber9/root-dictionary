@@ -2,7 +2,8 @@ import * as cheerio from "cheerio";
 import axios from "axios";
 import { RootWord } from "../entities/RootWord";
 import { connect } from "mongoose";
-import { RootWordModel } from "../entities/RootWord";
+import { RootWordModel } from "../model/models";
+
 import { log } from "console";
 
 //  Link	Root word	Meanings	Origin	Examples and Definition
@@ -37,8 +38,8 @@ const expandString = (str: string): string[] =>
     );
 
 const main = async () => {
-    const MONGODB_URI = "mongodb+srv://rein999:973TpflHHlG3tLyn@cluster-study.gjbpqjh.mongodb.net/english";
-    // const MONGODB_URI = "mongodb://localhost:27017/graphQL";
+    // const MONGODB_URI = "mongodb+srv://rein999:973TpflHHlG3tLyn@cluster-study.gjbpqjh.mongodb.net/english";
+    const MONGODB_URI = "mongodb://localhost:27017/english";
     const mongoose = await connect(MONGODB_URI);
     await mongoose.connection;
 

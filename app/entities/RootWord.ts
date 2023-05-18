@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { prop as Property, getModelForClass } from "@typegoose/typegoose";
+import { prop as Property } from "@typegoose/typegoose";
 import { index } from "@typegoose/typegoose";
 /*
 { name: "root_word", use: true },
@@ -33,4 +33,3 @@ export class RootWord {
     @Property({ default: new Date(), required: false, nullable: true })
     created_date?: Date;
 }
-export const RootWordModel = getModelForClass(RootWord);

@@ -29,7 +29,7 @@ type User {
   email: String!
   id: ID!
   username: String!
-  word_book: [String!]!
+  word_book: [WordBook!]!
 }
 
 input UserInput {
@@ -54,7 +54,7 @@ type WordBook {
   created_date: DateTime
   id: ID!
   name: String!
-  user: String!
+  user: User!
   words: [Word!]!
 }
 

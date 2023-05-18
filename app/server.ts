@@ -9,6 +9,8 @@ import { WordResolver } from "./resolvers/Dictionary";
 import { UserResolver } from "./resolvers/user";
 import { WordBookResolver } from "./resolvers/word-book";
 
+import { UserModel, WordBookModel } from "./model/models";
+
 const main = async () => {
     const schema = await buildSchema({
         resolvers: [WordResolver, UserResolver, WordBookResolver],
@@ -17,8 +19,8 @@ const main = async () => {
     });
 
     // create mongoose connection
-    const MONGODB_URI = "mongodb+srv://rein999:973TpflHHlG3tLyn@cluster-study.gjbpqjh.mongodb.net/english";
-    // const MONGODB_URI = "mongodb://localhost:27017/graphQL";
+    // const MONGODB_URI = "mongodb+srv://rein999:973TpflHHlG3tLyn@cluster-study.gjbpqjh.mongodb.net/english";
+    const MONGODB_URI = "mongodb://localhost:27017/english";
     const mongoose = await connect(MONGODB_URI);
     await mongoose.connection;
 
@@ -34,12 +36,16 @@ const main = async () => {
     server.applyMiddleware({ app } as unknown as ServerRegistration);
 
     app.use(Express.json());
-    app.post("/hello5", (req, res) => {
+    app.post("/hello5", async (req, res) => {
         const result = {
             code: 0,
             message: "success",
         };
-        res.send(result);
+        // const gg = await UserModel.findById({ _id: "645c7826cf6a2367aa1e3281" });
+        const gg = await WordBookModel.find({ user: "645c7826cf6a2367aa1e3281" });
+        console.log("🧧", gg);
+
+        res.send(gg);
     });
 
     app.get("/do", (req, res) => {

@@ -1,6 +1,7 @@
 import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from "type-graphql";
-import { Word, WordModel } from "../entities/Word";
+import { Word } from "../entities/Word";
 import { searchForDaumdic } from "../crawling/daum.dic";
+import { WordModel } from "../model/models";
 import { log } from "console";
 
 @Resolver((_of) => Word)

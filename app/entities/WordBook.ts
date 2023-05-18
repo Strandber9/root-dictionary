@@ -14,10 +14,10 @@ export class WordBook {
 
     @Field()
     @Property({})
-    name?: string;
+    name!: string;
 
-    @Field((_type) => String)
-    @Property({ ref: User, required: true })
+    @Field((_type) => User)
+    @Property({ ref: () => User, required: true })
     user!: Ref<User>;
 
     @Field((_type) => [Word])
@@ -30,5 +30,3 @@ export class WordBook {
 
     _doc?: WordBook;
 }
-
-export const WordBookModel = getModelForClass(WordBook);

@@ -1,13 +1,22 @@
 import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from "type-graphql";
-import { WordBook, WordBookModel } from "../entities/WordBook";
-import { User, UserModel } from "../entities/User";
+import { WordBook } from "../entities/WordBook";
+import { User } from "../entities/User";
+import { UserModel, WordBookModel } from "../model/models";
 import { WordbookInput } from "./types/wordbook-input";
-import { Word, WordModel } from "../entities/Word";
+import { Word } from "../entities/Word";
+import { WordModel } from "../model/models";
+
 import { WordResolver } from "./Dictionary";
 import { log } from "console";
+import { ObjectId } from "mongodb";
 
 @Resolver((_of) => WordBook)
 export class WordBookResolver {
+    /**
+     * 😊아이디로 검색
+     * @param id
+     * @returns
+     */
     @Query((_returns) => WordBook, { nullable: false })
     async findWordbookByID(@Arg("id") id: string) {
         console.log("🅱️ 🅱️ 🅱️ 🅱️ 🅱️");
@@ -20,15 +29,27 @@ export class WordBookResolver {
         return user?.word_book;
     }
 
+    /* 필드리졸버
+    ------------------------------------------------------------ */
+    /**
+     *
+     * @param wordBook
+     * @returns
+     */
     @FieldResolver((_type) => Word)
     async words(@Root() wordBook: WordBook) {
         return await WordModel.find({ _id: { $in: wordBook._doc!.words } });
     }
 
+    @FieldResolver((_type) => User)
+    async user(@Root() wordBook: WordBook) {
+        return await UserModel.findById({ _id: wordBook._doc!.user });
+    }
+
     @Mutation(() => WordBook)
     async createWordBook(@Arg("data") { name, user }: WordbookInput): Promise<WordBook> {
         const userData = await UserModel.findById({ _id: user }).lean();
-        if (!userData) throw Error("asdasdasd!!!");
+        if (!userData) throw Error("🚨🚨🚨 Not found user!!!");
         const wordBook = (
             await WordBookModel.create({
                 name,

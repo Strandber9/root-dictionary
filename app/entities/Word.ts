@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { prop as Property, getModelForClass } from "@typegoose/typegoose";
+import { prop as Property } from "@typegoose/typegoose";
 
 @ObjectType({ description: "The Categories model" })
 export class Word {
@@ -34,4 +34,3 @@ export class Word {
     @Property({ default: new Date(), required: false, nullable: true })
     created_date?: Date;
 }
-export const WordModel = getModelForClass(Word);
