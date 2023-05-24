@@ -1,12 +1,12 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { prop as Property, getModelForClass, index } from "@typegoose/typegoose";
+import { prop as Property, getModelForClass, Index } from "@typegoose/typegoose";
 
 import { Word } from "./Word";
 import { User } from "./User";
 
 import { Ref } from "../types";
 
-@index({ name: 1, user: 1 }, { unique: true })
+@Index({ name: 1, user: 1 }, { unique: true })
 @ObjectType({ description: "The Categories model" })
 export class WordBook {
     @Field(() => ID)
