@@ -45,7 +45,6 @@ export class User {
     profile_json?: any;
 
     @Field((_type) => [WordBook])
-    @Property({ ref: () => WordBook, default: [], required: true, nullable: true, type: () => [String] })
     word_book?: [Ref<WordBook>];
 
     @Field({ nullable: true })

@@ -3,6 +3,7 @@ import Express from "express";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { connect } from "mongoose";
+import dotenv from "dotenv";
 
 import { WordResolver } from "./resolvers/Dictionary";
 import { UserResolver } from "./resolvers/user";
@@ -14,6 +15,8 @@ import passport from "passport";
 import NaverOauthRouter from "./router/auth/naver.oauth";
 import KakaoOauthRouter from "./router/auth/kakao.oauth";
 
+dotenv.config();
+
 const main = async () => {
     const schema = await buildSchema({
         resolvers: [WordResolver, UserResolver, WordBookResolver],
@@ -24,8 +27,8 @@ const main = async () => {
 
     // create mongoose connection
     // const MONGODB_URI = "mongodb+srv://rein999:973TpflHHlG3tLyn@cluster-study.gjbpqjh.mongodb.net/english";
-    const MONGODB_URI = "mongodb://localhost:27017/english";
-    const mongoose = await connect(MONGODB_URI);
+    // const MONGODB_URI = "mongodb://localhost:27017/english";
+    const mongoose = await connect(process.env.MONGODB_URI!);
     await mongoose.connection;
 
     const server = new ApolloServer({

@@ -6,7 +6,6 @@ import { log } from "console";
 
 @Resolver((_of) => Word)
 export class WordResolver {
-    @Authorized("ADMIN")
     @Query((_returns) => Word, { nullable: false })
     async returnWord(@Arg("word") word: string) {
         word = word.toLowerCase();

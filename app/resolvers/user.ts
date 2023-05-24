@@ -20,17 +20,17 @@ export class UserResolver {
 
     @FieldResolver((_type) => WordBook)
     async word_book(@Root() user: User): Promise<Array<WordBook>> {
-        return await WordBookModel.find({ user: user._doc._id });
+        return await WordBookModel.find({ user: user._doc?._id });
     }
 
-    @Mutation(() => User)
-    async createUser(@Arg("data") { username, email }: UserInput): Promise<User> {
-        const user = (
-            await UserModel.create({
-                username,
-                email,
-            })
-        ).save();
-        return user as unknown as User;
-    }
+    // @Mutation(() => User)
+    // async createUser(@Arg("data") { username, email }: UserInput): Promise<User> {
+    //     const user = (
+    //         await UserModel.create({
+    //             username,
+    //             email,
+    //         })
+    //     ).save();
+    //     return user as unknown as User;
+    // }
 }
