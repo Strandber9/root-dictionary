@@ -23,6 +23,11 @@ export class WordBookResolver {
         return await WordBookModel.findById({ _id: id });
     }
 
+    /**
+     * 유저 아이디를 입력받아 워드북을 찾아준다
+     * @param userId
+     * @returns
+     */
     @Query((_returns) => [WordBook], { nullable: false })
     async findWordbookByUser(@Arg("userId") userId: string) {
         const user = await UserModel.findById({ _id: userId }).lean();
@@ -32,7 +37,7 @@ export class WordBookResolver {
     /* 필드리졸버
     ------------------------------------------------------------ */
     /**
-     *
+     * 워드북의 words요청을 처리하는 리졸버
      * @param wordBook
      * @returns
      */
@@ -41,11 +46,21 @@ export class WordBookResolver {
         return await WordModel.find({ _id: { $in: wordBook._doc!.words } });
     }
 
+    /**
+     * 워드북의 사용자 요청을 처리하는 리졸버
+     * @param wordBook
+     * @returns
+     */
     @FieldResolver((_type) => User)
     async user(@Root() wordBook: WordBook) {
         return await UserModel.findById({ _id: wordBook._doc!.user });
     }
 
+    /**
+     * 워드북 생성
+     * @param param0
+     * @returns
+     */
     @Mutation(() => WordBook)
     async createWordBook(@Arg("data") { name, user }: WordbookInput): Promise<WordBook> {
         const userData = await UserModel.findById({ _id: user }).lean();
@@ -59,6 +74,12 @@ export class WordBookResolver {
         return wordBook;
     }
 
+    /**
+     * 워드북에 단어 추가
+     * @param id
+     * @param wordId
+     * @returns
+     */
     @Mutation(() => WordBook)
     async appendWordID(@Arg("id") id: string, @Arg("wordId") wordId: string) {
         const wordBook = await WordBookModel.findById(id);
@@ -75,6 +96,12 @@ export class WordBookResolver {
         return wordBook;
     }
 
+    /**
+     * 단어장에 단어 추가
+     * @param id
+     * @param word
+     * @returns
+     */
     @Mutation(() => WordBook)
     async appendWord(@Arg("id") id: string, @Arg("word") word: string) {
         const wordData = await new WordResolver().returnWord(word);

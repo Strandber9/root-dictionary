@@ -18,8 +18,9 @@ type Mutation {
 type Query {
   findWordbookByID(id: String!): WordBook!
   findWordbookByUser(userId: String!): [WordBook!]!
-  returnUser(id: String!): User!
+  me: User!
   returnWord(word: String!): Word!
+  user(id: String!): User!
   words: [Word!]!
 }
 
@@ -28,6 +29,11 @@ type User {
   created_date: DateTime
   email: String!
   id: ID!
+  profile_image: String!
+  providerType: String!
+  roles: [String!]!
+  snsId: String!
+  token: String!
   username: String!
   word_book: [WordBook!]!
 }

@@ -1,5 +1,4 @@
-import { ApolloServer, ServerRegistration } from "apollo-server-express";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import { ApolloServer, ServerRegistration, AuthenticationError, ForbiddenError } from "apollo-server-express";
 import Express from "express";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
@@ -9,13 +8,18 @@ import { WordResolver } from "./resolvers/Dictionary";
 import { UserResolver } from "./resolvers/user";
 import { WordBookResolver } from "./resolvers/word-book";
 
-import { UserModel, WordBookModel } from "./model/models";
+import { applicationAuthChecker } from "./auth/Authorization";
+import { ApplicationContext } from "./auth/context.interface";
+import passport from "passport";
+import NaverOauthRouter from "./router/auth/naver.oauth";
+import KakaoOauthRouter from "./router/auth/kakao.oauth";
 
 const main = async () => {
     const schema = await buildSchema({
         resolvers: [WordResolver, UserResolver, WordBookResolver],
         emitSchemaFile: true,
         validate: false,
+        authChecker: applicationAuthChecker,
     });
 
     // create mongoose connection
@@ -27,6 +31,12 @@ const main = async () => {
     const server = new ApolloServer({
         schema,
         // plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
+        context: ({ req }): ApplicationContext => {
+            return {
+                token: req.headers.authorization?.substring(7),
+                user: undefined,
+            };
+        },
     });
 
     const app = Express();
@@ -35,25 +45,13 @@ const main = async () => {
 
     server.applyMiddleware({ app } as unknown as ServerRegistration);
 
+    // Passport 초기화 및 세션 연결
+    app.use(passport.initialize());
+
     app.use(Express.json());
-    app.post("/hello5", async (req, res) => {
-        const result = {
-            code: 0,
-            message: "success",
-        };
-        // const gg = await UserModel.findById({ _id: "645c7826cf6a2367aa1e3281" });
-        const gg = await WordBookModel.find({ user: "645c7826cf6a2367aa1e3281" });
-        console.log("🧧", gg);
-
-        res.send(gg);
-    });
-
-    app.get("/do", (req, res) => {
-        const out = {
-            msg: "🚀🚀🚀",
-        };
-        res.send(out);
-    });
+    // OAuth2 인증
+    app.use("/auth", NaverOauthRouter);
+    app.use("/auth", KakaoOauthRouter);
 
     app.listen({ port: 3333 }, () =>
         console.log(`🚀 Server ready and listening at ==> http://localhost:3333${server.graphqlPath}`)

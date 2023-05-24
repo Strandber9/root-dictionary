@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from "type-graphql";
+import { Resolver, Mutation, Arg, Query, Authorized, FieldResolver, Root } from "type-graphql";
 import { Word } from "../entities/Word";
 import { searchForDaumdic } from "../crawling/daum.dic";
 import { WordModel } from "../model/models";
@@ -6,6 +6,7 @@ import { log } from "console";
 
 @Resolver((_of) => Word)
 export class WordResolver {
+    @Authorized("ADMIN")
     @Query((_returns) => Word, { nullable: false })
     async returnWord(@Arg("word") word: string) {
         word = word.toLowerCase();

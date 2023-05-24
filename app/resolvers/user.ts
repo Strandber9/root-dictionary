@@ -1,14 +1,21 @@
-import { Resolver, Mutation, Arg, Query, FieldResolver, Root } from "type-graphql";
+import { Resolver, Mutation, Arg, Query, FieldResolver, Root, Ctx, Authorized } from "type-graphql";
 import { User } from "../entities/User";
 import { UserInput } from "./types/user-input";
 import { WordBook } from "../entities/WordBook";
 import { UserModel, WordBookModel } from "../model/models";
+import { ApplicationContext } from "../auth/context.interface";
 
 @Resolver((_of) => User)
 export class UserResolver {
     @Query((_returns) => User, { nullable: false })
-    async returnUser(@Arg("id") id: string) {
+    async user(@Arg("id") id: string) {
         return await UserModel.findById({ _id: id });
+    }
+
+    @Authorized()
+    @Query((_returns) => User, { nullable: false })
+    async me(@Ctx() ctx: ApplicationContext) {
+        return ctx.user;
     }
 
     @FieldResolver((_type) => WordBook)
