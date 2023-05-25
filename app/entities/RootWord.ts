@@ -8,7 +8,7 @@ import { index } from "@typegoose/typegoose";
         { name: "definition", use: true },*/
 
 // @index({ root_word: 1 }, { unique: true })
-@ObjectType({ description: "" })
+@ObjectType({ description: "The RootWord model" })
 export class RootWord {
     @Field(() => ID)
     id!: string;

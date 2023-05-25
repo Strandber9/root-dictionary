@@ -9,13 +9,14 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 type Mutation {
-  appendWordBook(id: String!, word: String!): WordBook!
+  appendWord(id: String!, word: String!): Word!
   createWordBook(name: String!): WordBook!
   deleteWordBook(name: String!): WordBook!
 }
 
 type Query {
   findWordbookByID(id: String!): WordBook!
+  findWordbookByName(name: String!): WordBook!
   me: User!
   returnWord(word: String!): Word!
   user(id: String!): User!
@@ -37,7 +38,7 @@ type User {
   word_book: [WordBook!]!
 }
 
-"""The Categories model"""
+"""The word model"""
 type Word {
   created_date: DateTime
   dic_type: String!
@@ -49,7 +50,7 @@ type Word {
   wordid: String!
 }
 
-"""The Categories model"""
+"""The WordBook model"""
 type WordBook {
   created_date: DateTime
   id: ID!

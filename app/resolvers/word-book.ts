@@ -25,6 +25,17 @@ export class WordBookResolver {
     }
 
     /**
+     * 😊이름으로 검색
+     * @param id
+     * @returns
+     */
+    @Authorized("ADMIN")
+    @Query((_returns) => WordBook, { nullable: false })
+    async findWordbookByName(@Arg("name") name: string, @Ctx() ctx: ApplicationContext) {
+        return await WordBookModel.findOne({ user: ctx.user?.id, name: name });
+    }
+
+    /**
      * 전체 단어장 리턴
      * @param ctx
      * @returns
@@ -96,9 +107,10 @@ export class WordBookResolver {
      * @param word
      * @returns
      */
-    @Mutation(() => WordBook)
-    async appendWordBook(@Arg("id") id: string, @Arg("word") word: string) {
+    @Mutation(() => Word)
+    async appendWord(@Arg("id") id: string, @Arg("word") word: string) {
         const wordData = await new WordResolver().returnWord(word);
-        return await WordBookModel.findOneAndUpdate({ _id: id }, { $addToSet: { words: wordData._id } }, { new: true });
+        await WordBookModel.findOneAndUpdate({ _id: id }, { $addToSet: { words: wordData._id } }, { new: true });
+        return wordData;
     }
 }

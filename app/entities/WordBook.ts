@@ -7,7 +7,7 @@ import { User } from "./User";
 import { Ref } from "../types";
 
 @index({ name: 1, user: 1 }, { unique: true })
-@ObjectType({ description: "The Categories model" })
+@ObjectType({ description: "The WordBook model" })
 export class WordBook {
     @Field(() => ID)
     id?: string;

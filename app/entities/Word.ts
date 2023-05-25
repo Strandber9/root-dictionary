@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID, Authorized } from "type-graphql";
 import { prop as Property } from "@typegoose/typegoose";
 
-@ObjectType({ description: "The Categories model" })
+@ObjectType({ description: "The word model" })
 export class Word {
     @Authorized()
     @Field(() => ID)
