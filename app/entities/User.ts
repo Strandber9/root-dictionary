@@ -1,11 +1,10 @@
 import { ObjectType, Field, ID, Authorized } from "type-graphql";
-import { prop as Property, index } from "@typegoose/typegoose";
+import { prop as Property, Index } from "@typegoose/typegoose";
 import { WordBook } from "./WordBook";
 import { Ref } from "../types";
 import { Schema } from "mongoose";
-import JwtProvider from "../auth/jwt/token.provider";
 
-@index({ username: 1, providerType: 1 }, { unique: true })
+@Index({ username: 1, providerType: 1 }, { unique: true })
 @ObjectType({ description: "The User model" })
 export class User {
     [x: string]: any;
@@ -22,7 +21,7 @@ export class User {
 
     @Authorized("ADMIN")
     @Field((_type) => [String])
-    @Property({ default: [], required: false, nullable: true })
+    @Property({ type: [String], default: [] })
     roles!: string[];
 
     @Field()

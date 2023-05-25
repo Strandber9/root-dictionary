@@ -3,9 +3,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const token = jwt.sign({ email: "test@user.com" }, "our_secret");
-console.log(token);
-
 export default class JwtProvider {
     /**
      *
